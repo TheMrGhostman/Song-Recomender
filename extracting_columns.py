@@ -29,7 +29,7 @@ columns_maybe = ["metadata.songs.cols.idx_artist_terms",
                  "analysis.songs.cols.time_signature_confidence",
                  "analysis.songs.cols.key_confidence"]
 
-columns_all_names = columns_yes + [i.split(".")[-1] for i in columns_maybe]
+columns_all_names = columns_yes_names + [i.split(".")[-1] for i in columns_maybe]
 
 f = tables.open_file("data/msd_summary_file.h5", mode="r", driver="H5FD_CORE")
 unique_songs = np.load("data/label_encoder_songs_classes_.npy",allow_pickle=True)
