@@ -153,6 +153,16 @@ class Recommender(object):
         return recommended_songs, distances
 
 
+def setup_based_model():
+    model = Recommender("user_based_NN", verbose=True)
+    model.load_encoders(path_songs="data/label_encoder_songs_classes_.npy",
+                      path_users="data/label_encoder_users_classes_.npy")
+    X = sparse.load_npz("data/song-user_matrix_with_rating.npz")
+    model.fit(X=X)
+    model.save_model(model_name="Item-User_KNN_model")
+    print("Model prepared and saved!")
+
+
 def user_based_model():
     "simplified function from model loading and setting"
 
