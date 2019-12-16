@@ -164,8 +164,7 @@ def setup_based_model():
 
 
 def user_based_model():
-    "simplified function from model loading and setting"
-
+    "simplified function for model loading and setting"
     model = Recommender("user_based_NN", verbose=True)
     model.load_encoders(path_songs="data/label_encoder_songs_classes_.npy",
                       path_users="data/label_encoder_users_classes_.npy")
