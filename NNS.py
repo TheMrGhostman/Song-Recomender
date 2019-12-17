@@ -92,13 +92,14 @@ class Recommender(object):
         self.n_neighbors = self.model.n_neighbors
         self.metric = self.model.metric
 
-    def load_encoders(self, path_songs, path_users):
+    def load_encoders(self, path_songs, path_users=None):
         """
         :param path_songs:      Path to saved encoding for songs_id.
         :param path_users:      Path to saved encoding for users_id.
         """
         self.song_label_encoder.classes_ = np.load(path_songs, allow_pickle=True)
-        self.user_label_encoder.classes_ = np.load(path_users, allow_pickle=True)
+        if path_users != None:
+            self.user_label_encoder.classes_ = np.load(path_users, allow_pickle=True)
 
     def recommendNtoN(self, all_recommendations, distances):
         """
@@ -163,10 +164,19 @@ def setup_based_model():
     print("Model prepared and saved!")
 
 
-def user_based_model():
-    "simplified function for model loading and setting"
-    model = Recommender("user_based_NN", verbose=True)
+def user_based_model(verbose=True):
+    """simplified function for model loading and setting"""
+    model = Recommender("user_based_NN", verbose=verbose)
     model.load_encoders(path_songs="data/label_encoder_songs_classes_.npy",
-                      path_users="data/label_encoder_users_classes_.npy")
+                        path_users="data/label_encoder_users_classes_.npy")
     model.load_model(model_name="Item-User_KNN_model")
+    return model
+
+
+def content_based_model(verbose=True):
+    """simplified function for model loading and setting"""
+    model = Recommender("content_based_NN", verbose=verbose)
+    model.load_encoders(path_songs="data/content_based_label_encoder_songs_classes_.npy",
+                        path_users=None)
+    model.load_model(model_name="Content_based_KNN_model")
     return model
