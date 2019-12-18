@@ -10,21 +10,6 @@ from IPython.core.debugger import set_trace
 from sklearn.neighbors import NearestNeighbors
 from sklearn.preprocessing import LabelEncoder
 
-"""
-x = np.random.randn(50,50)
-dropout = np.random.binomial(2,0.1,50*50).reshape(50,50)
-y = np.random.randn(50,1)
-x_sp = x*dropout
-x_csr = sparse.csr_matrix(x_sp)
-sys.getsizeof(x_csr)
-sys.getsizeof(x_sp)
-
-np.sum(x_csr.dot(y)- x_sp@y)
-
->>> -5e-17
-"""
-
-#nn_model = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=NUM_NEIGBORS, n_jobs=-1)
 
 class Recommender(object):
     def __init__(self, model_type, metric='cosine', n_neighbors=20, verbose=False):
