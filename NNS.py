@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from scipy import sparse
 import sys
 from time import time
+import implicit
 from IPython.core.debugger import set_trace
 
 from sklearn.neighbors import NearestNeighbors
@@ -26,7 +27,7 @@ class Recommender(object):
         """
         self.metric = metric
         self.n_neighbors = n_neighbors
-        if model_type in ['user_based_NN', "content_based_NN"]:
+        if model_type in ['user_based_NN', "content_based_NN", "svd_based"]:
             self.model_type = model_type
         else:
             raise ValueError("Unknown model type.")
@@ -44,6 +45,10 @@ class Recommender(object):
         elif self.model_type == 'content_based_NN':
             self.model = NearestNeighbors(metric=self.metric, algorithm='auto', n_neighbors=self.n_neighbors, n_jobs=-1)
             # data matrix is not sparse so more efficient algorithms are possible to use
+        elif self.model_type == 'svd_based':
+            self.model_svd = implicit.als.AlternatningLeastSquares(factors=128, regularization=0.01, use_native=True, use_gpu=False, iterations=15,num_threads=0)
+            self.model = NearestNeighbors(metric=self.metric, algorithm='auto', n_neighbors=self.n_neighbors, n_jobs=-1)
+            # svd is used for feature extraction => normal content based
         else:
             raise ValueError("Something unexpected happened!")
 
@@ -56,6 +61,9 @@ class Recommender(object):
             raise ValueError("Dataset is not in correct format. Use np.ndarray or scipy.sparse.csr_matrix!")
         if "self.model" not in locals():
             self.create_model()
+        if self.model_type=='svd_based':
+            self.model_svd.fit(X)
+            X = self.model_svd.item_factors
         self.model.fit(X)
         return self.model
 
@@ -106,7 +114,6 @@ class Recommender(object):
         :param song_list:           List of songs to which we want to recommend different songs.
         :param full_name:           bool - song_list consists of song_ids insted of encodings
         :param return_id:           bool - True = return song_id / False = return songs encodings
-
         Returns matrix of recommendations where first column is encodings (song_id) of recommended songs
             and second column is distance from input song.
         """
@@ -155,6 +162,14 @@ def user_based_model(verbose=True):
     model.load_encoders(path_songs="data/label_encoder_songs_classes_.npy",
                         path_users="data/label_encoder_users_classes_.npy")
     model.load_model(model_name="Item-User_KNN_model")
+    return model
+
+
+def svd_content_based_model(verbose=True):
+    model = Recommender("svd_based", verbose=verbose)
+    model.load_encoders(path_songs="data/svd-song_label_encoder_classes.npy",
+                        path_users=None")
+    model.load_model(model_name="SVD_based_model")
     return model
 
 
