@@ -168,7 +168,7 @@ def user_based_model(verbose=True):
 def svd_content_based_model(verbose=True):
     model = Recommender("svd_based", verbose=verbose)
     model.load_encoders(path_songs="data/svd-song_label_encoder_classes.npy",
-                        path_users=None")
+                        path_users=None)
     model.load_model(model_name="SVD_based_model")
     return model
 
