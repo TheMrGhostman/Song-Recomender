@@ -1,0 +1,7 @@
+flask
+pandas
+numpy
+flask_table
+scipy
+joblib
+matplotlib

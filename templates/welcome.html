@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+    <head>
+        <html lang="en" dir="ltr">
+        <meta charset="utf-8">
+		<style type="text/css">
+			@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
+			body{
+  				background: -webkit-linear-gradient(left, #25c481, #25b7c4);
+  				background: linear-gradient(to right, #25c481, #25b7c4);
+  				font-family: 'Roboto', sans-serif;
+			}
+			section{
+  				margin: 50px;
+			}
+
+
+	      h1
+	      {
+	        font-size:50px;
+	        margin-top:0;
+	        font-family:Arial, sans-serif;
+	        text-shadow:2px 0 15px #292929;
+	        letter-spacing:6px;
+	        text-decoration:none;
+	        color:#AAA;
+	      }
+
+	      #banner
+	      {
+	        background-size: contain;
+	        text-align:center;
+	        background-repeat:no-repeat;
+	        border-radius:50px;
+	        padding: 150px;
+
+	      }
+
+	      .lead
+	      {
+	        background-color:rgba(200,255,255,0.7);
+	        border-radius:50px;
+	        font-family:Sintony, sans-serif;
+
+	      }
+		  footer{
+			  position: absolute;
+			  bottom: 200;
+		  }
+
+        
+		</style>
+    </head>
+
+    <body>
+        {% extends "template.html" %}
+        {% block content %}
+        <h1 style="text-align:center"><font color="gold"> The Music Recommender </h1>
+
+	        <div id="banner">
+	        <form action="{{ url_for('rating') }}" method="GET">
+
+	     		<p class="lead"><font color="black"><strong>This recommder engine uses content-based filtering to return you a list of songs which you might like!<br/> Press 'Start' button and select 10 song that you like! <br/></strong></p>
+	     		<button type="submit" class="btn btn-success"><font color="navy"><strong>Start!</strong></button>
+	   		</form>
+	   		</div>
+	   		
+
+        {% endblock %}
+		
+	</body>
+	
+</html>
+
